@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>QR</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            .flexbox {
+                display: -webkit-flex;
+                display: flex;
+                -webkit-justify-content: center;
+                justify-content: center;
+                -webkit-align-items: stretch;
+                align-items: stretch;
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="flexbox">
+            <a href="hades://api?url=<%= url %>&hash=<%= hash %>">
+                <%- svgString %>
+            </a>
+        </div>
+        <script src="/static/js/socket.io.js"></script>
+        <script>
+            var socket = io('http://192.168.88.194:3000', {
+                transports: ['websocket'],
+            });
+            socket.on('sendMessage', function(data) {
+                console.log(socket.id);
+                console.log(data);
+                socket.emit('sendMessage', socket.id);
+            });
+        </script>
+    </body>
+</html>
