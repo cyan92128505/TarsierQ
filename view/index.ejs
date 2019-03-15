@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>QR</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="/static/css/bootstrap.css" />
         <style>
             .flexbox {
                 display: -webkit-flex;
@@ -18,22 +19,102 @@
         </style>
     </head>
 
-    <body>
-        <div class="flexbox">
-            <a href="hades://api?url=<%= url %>&hash=<%= hash %>">
-                <%- svgString %>
+    <body ng-app="qrApp">
+        <div class="flexbox" ng-controller="qrCtrl">
+            <a ng-href="{{ generatorUrl }}">
+                <div id="generator"></div>
             </a>
+
+            <a ng-href="{{ loginUrl }}">
+                <div id="login"></div>
+            </a>
+            <ul>
+                <li ng-repeat="c in clientList" ng-click="createClientLogin(c)">
+                    c
+                </li>
+            </ul>
         </div>
         <script src="/static/js/socket.io.js"></script>
+        <script src="/static/js/qrcode.js"></script>
+        <script src="/static/js/angular.min.js"></script>
         <script>
-            var socket = io('http://192.168.88.194:3000', {
-                transports: ['websocket'],
-            });
-            socket.on('sendMessage', function(data) {
-                console.log(socket.id);
-                console.log(data);
-                socket.emit('sendMessage', socket.id);
-            });
+            (function() {
+                var url = '<%= rawUrl %>';
+
+                function qrCtrlFunc($scope, $http, $q) {
+                    var socket = io('http://192.168.88.194:3000', {
+                        transports: ['websocket'],
+                    });
+
+                    $scope.loginUrl = '';
+                    $scope.clientList = [];
+
+                    socket.on('sendMessage', function(data) {
+                        console.log(socket.id);
+                        console.log(data);
+
+                        $scope.generatorUrl =
+                            'hades:\/\/api?url=' +
+                            url +
+                            '/generator&hash=' +
+                            socket.id;
+
+                        getClientList($scope, $http);
+                    });
+
+                    createQrcodeImage(
+                        'generator',
+                        url + '/generator',
+                        socket.id
+                    );
+
+                    getClientList($scope, $http).then(function() {
+                        if ($scope.clientList.length == 0) {
+                            return;
+                        }
+                        createClientLogin($scope.clientList[0]);
+                    });
+
+                    function createClientLogin(client) {
+                        $scope.loginUrl =
+                            'hades:\/\/api?url=' +
+                            url +
+                            '/login/' +
+                            client.deviceId +
+                            '&hash=';
+
+                        createQrcodeImage(
+                            'login',
+                            url + '/login/' + client.deviceId,
+                            ''
+                        );
+                    }
+
+                    $scope.createClientLogin = createClientLogin;
+                }
+
+                function getClientList($scope, $http) {
+                    return $http.get('/client').then(function(err, result) {
+                        $scope.clientList = result.data;
+                    });
+                }
+
+                function createQrcodeImage(qrcodeId, url, hash) {
+                    var typeNumber = 4;
+                    var errorCorrectionLevel = 'L';
+                    var qr = qrcode(typeNumber, errorCorrectionLevel);
+                    var qrvalue = '{"url":"' + url + '","hash":"' + hash + '"}';
+                    console.log(qrvalue);
+                    qr.addData(qrvalue);
+                    qr.make();
+                    document.getElementById(
+                        qrcodeId
+                    ).innerHTML = qr.createImgTag(8, 2);
+                }
+
+                var app = angular.module('qrApp', []);
+                app.controller('qrCtrl', ['$scope', '$http', '$q', qrCtrlFunc]);
+            })();
         </script>
     </body>
 </html>
