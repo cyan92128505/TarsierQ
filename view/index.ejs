@@ -3,118 +3,88 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>QR</title>
+        <title>TARSIERQ</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="/static/css/bootstrap.css" />
-        <style>
-            .flexbox {
-                display: -webkit-flex;
-                display: flex;
-                -webkit-justify-content: center;
-                justify-content: center;
-                -webkit-align-items: stretch;
-                align-items: stretch;
-                text-align: center;
-            }
-        </style>
+        <script>
+            var url = '<%= rawUrl %>';
+        </script>
     </head>
 
     <body ng-app="qrApp">
-        <div class="flexbox" ng-controller="qrCtrl">
-            <a ng-href="{{ generatorUrl }}">
-                <div id="generator"></div>
-            </a>
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand">
+                TarsierQ
+            </span>
+        </nav>
+        <div class="container" ng-controller="qrCtrl">
+            <div class="row">
+                <div class="col-sm">
+                    <ul
+                        class="list-group list-group-horizontal list-group-flush"
+                    >
+                        <li class="list-group-item">
+                            <div class="card" style="width: 18rem;">
+                                <div class="text-center" id="generator"></div>
+                                <div class="card-body">
+                                    <h5 class="card-title">註冊</h5>
+                                    <p class="card-text"></p>
+                                    <a ng-href="{{ generatorUrl }}">{{
+                                        generatorUrl
+                                    }}</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="card" style="width: 18rem;">
+                                <div class="text-center" id="login"></div>
+                                <div class="card-body">
+                                    <h5 class="card-title">登入</h5>
+                                    <p class="card-text"></p>
+                                    <a ng-href="{{ loginUrl }}">{{
+                                        loginUrl
+                                    }}</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <button class="btn btn-default" ng-click="logout()">
+                        登出
+                    </button>
+                    <div class="list-group">
+                        <a
+                            ng-repeat="c in clientList"
+                            ng-click="createClientLogin(c)"
+                            class="list-group-item list-group-item-action"
+                        >
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1" ng-bind="c.deviceId"></h5>
+                            </div>
+                            <p class="mb-1" ng-bind="c.token"></p>
+                            <small ng-if="c.login">✅</small>
+                            <small ng-if="!c.login">❌</small>
+                        </a>
 
-            <a ng-href="{{ loginUrl }}">
-                <div id="login"></div>
-            </a>
-            <ul>
-                <li ng-repeat="c in clientList" ng-click="createClientLogin(c)">
-                    c
-                </li>
-            </ul>
+                        <a
+                            ng-if="clientList.length==0"
+                            class="list-group-item list-group-item-action"
+                        >
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">無裝置</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <script src="/static/js/socket.io.js"></script>
-        <script src="/static/js/qrcode.js"></script>
-        <script src="/static/js/angular.min.js"></script>
-        <script>
-            (function() {
-                var url = '<%= rawUrl %>';
-
-                function qrCtrlFunc($scope, $http, $q) {
-                    var socket = io('http://192.168.88.194:3000', {
-                        transports: ['websocket'],
-                    });
-
-                    $scope.loginUrl = '';
-                    $scope.clientList = [];
-
-                    socket.on('sendMessage', function(data) {
-                        console.log(socket.id);
-                        console.log(data);
-
-                        $scope.generatorUrl =
-                            'hades:\/\/api?url=' +
-                            url +
-                            '/generator&hash=' +
-                            socket.id;
-
-                        getClientList($scope, $http);
-                    });
-
-                    createQrcodeImage(
-                        'generator',
-                        url + '/generator',
-                        socket.id
-                    );
-
-                    getClientList($scope, $http).then(function() {
-                        if ($scope.clientList.length == 0) {
-                            return;
-                        }
-                        createClientLogin($scope.clientList[0]);
-                    });
-
-                    function createClientLogin(client) {
-                        $scope.loginUrl =
-                            'hades:\/\/api?url=' +
-                            url +
-                            '/login/' +
-                            client.deviceId +
-                            '&hash=';
-
-                        createQrcodeImage(
-                            'login',
-                            url + '/login/' + client.deviceId,
-                            ''
-                        );
-                    }
-
-                    $scope.createClientLogin = createClientLogin;
-                }
-
-                function getClientList($scope, $http) {
-                    return $http.get('/client').then(function(err, result) {
-                        $scope.clientList = result.data;
-                    });
-                }
-
-                function createQrcodeImage(qrcodeId, url, hash) {
-                    var typeNumber = 4;
-                    var errorCorrectionLevel = 'L';
-                    var qr = qrcode(typeNumber, errorCorrectionLevel);
-                    var qrvalue = '{"url":"' + url + '","hash":"' + hash + '"}';
-                    console.log(qrvalue);
-                    qr.addData(qrvalue);
-                    qr.make();
-                    document.getElementById(
-                        qrcodeId
-                    ).innerHTML = qr.createImgTag(8, 2);
-                }
-
-                var app = angular.module('qrApp', []);
-                app.controller('qrCtrl', ['$scope', '$http', '$q', qrCtrlFunc]);
-            })();
-        </script>
+        <script src="/static/js/lib/socket.io.js"></script>
+        <script src="/static/js/lib/qrcode.js"></script>
+        <script src="/static/js/lib/angular.min.js"></script>
+        <script src="/static/js/main.js"></script>
     </body>
 </html>
