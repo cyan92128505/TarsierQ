@@ -1,6 +1,6 @@
 (function() {
     function qrCtrlFunc($scope, $http, $q) {
-        var socket = io('http://192.168.88.194:3000', {
+        var socket = io(url, {
             transports: ['websocket'],
         });
 
@@ -36,10 +36,14 @@
             if ($scope.clientList.length == 0) {
                 return;
             }
+            $scope.clientList[0].active = true;
             createClientLogin($scope.clientList[0]);
         });
 
         function createClientLogin(client) {
+            $scope.clientList.forEach(
+                c => (c.active = client.token === c.token)
+            );
             $scope.loginUrl = 'hades://api?url="' + url + '/login"' + '&hash=';
 
             createQrcodeImage('login', url + '/login', '');
@@ -48,7 +52,13 @@
         $scope.createClientLogin = createClientLogin;
 
         $scope.logout = function() {
+            $scope.loginUrl = null;
             $http.get('/logout?t=' + new Date().valueOf());
+        };
+
+        $scope.clear = function() {
+            $scope.loginUrl = null;
+            $http.get('/clear?t=' + new Date().valueOf());
         };
     }
 
@@ -66,9 +76,18 @@
         console.log(qrvalue);
         qr.addData(qrvalue);
         qr.make();
-        document.getElementById(qrcodeId).innerHTML = qr.createImgTag();
+        document.getElementById(qrcodeId)
+            ? (document.getElementById(qrcodeId).innerHTML = qr.createImgTag())
+            : '';
     }
 
-    var app = angular.module('qrApp', []);
+    var app = angular.module('qrApp', []).config([
+        '$compileProvider',
+        function($compileProvider) {
+            $compileProvider.aHrefSanitizationWhitelist(
+                /^\s*(https?|ftp|mailto|chrome-extension|hades):/
+            );
+        },
+    ]);
     app.controller('qrCtrl', ['$scope', '$http', '$q', qrCtrlFunc]);
 })();

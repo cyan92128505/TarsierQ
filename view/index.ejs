@@ -20,52 +20,49 @@
         <div class="container" ng-controller="qrCtrl">
             <div class="row">
                 <div class="col-sm">
-                    <ul
-                        class="list-group list-group-horizontal list-group-flush"
-                    >
-                        <li class="list-group-item">
-                            <div class="card" style="width: 18rem;">
-                                <div class="text-center" id="generator"></div>
-                                <div class="card-body">
-                                    <h5 class="card-title">註冊</h5>
-                                    <p class="card-text"></p>
-                                    <a ng-href="{{ generatorUrl }}">{{
-                                        generatorUrl
-                                    }}</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="card" style="width: 18rem;">
-                                <div class="text-center" id="login"></div>
-                                <div class="card-body">
-                                    <h5 class="card-title">登入</h5>
-                                    <p class="card-text"></p>
-                                    <a ng-href="{{ loginUrl }}">{{
-                                        loginUrl
-                                    }}</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item"></li>
-                    </ul>
+                    <div class="card" style="width: 18rem;">
+                        <a href="{{ generatorUrl }}">
+                            <div class="text-center" id="generator"></div>
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">註冊</h5>
+                            <p class="card-text"></p>
+                            <a href="{{ generatorUrl }}">{{ generatorUrl }}</a>
+                        </div>
+                    </div>
+                    <div class="card" style="width: 18rem;">
+                        <a ng-show="loginUrl" href="{{ loginUrl }}">
+                            <div class="text-center" id="login"></div>
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">登入</h5>
+                            <p class="card-text"></p>
+                            <a href="{{ loginUrl }}">{{ loginUrl }}</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm">
                     <button class="btn btn-default" ng-click="logout()">
-                        登出
+                        登出</button
+                    ><button class="btn btn-default" ng-click="clear()">
+                        清空
                     </button>
                     <div class="list-group">
                         <a
                             ng-repeat="c in clientList"
                             ng-click="createClientLogin(c)"
-                            class="list-group-item list-group-item-action"
+                            class="list-group-item list-group-item-action {{
+                                c.active ? 'active' : ''
+                            }}"
                         >
-                            <div class="d-flex w-100 justify-content-between">
+                            <div
+                                class="d-flex w-100 text-truncate justify-content-between"
+                            >
                                 <h5 class="mb-1" ng-bind="c.deviceId"></h5>
                             </div>
-                            <p class="mb-1" ng-bind="c.token"></p>
+                            <p class="mb-1 text-truncate" ng-bind="c.token"></p>
                             <small ng-if="c.login">✅</small>
                             <small ng-if="!c.login">❌</small>
                         </a>

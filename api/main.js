@@ -13,7 +13,7 @@ module.exports = function api(app, clientList, io) {
 
     app.get('/', function(req, res) {
         const ifaces = os.networkInterfaces();
-        const url = `http://${
+        const url = `${
             !!ifaces.eth0 ? ifaces.eth0[0].address : '192.168.88.194'
         }:3000`;
 
@@ -43,6 +43,7 @@ module.exports = function api(app, clientList, io) {
 
     app.get('/clear', (req, res, next) => {
         clientList = clientList.filter(c => c.deviceId === 0);
+        io.emit('refresh');
         res.json({
             clientList: clientList,
         });
