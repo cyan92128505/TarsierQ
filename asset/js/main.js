@@ -1,84 +1,107 @@
 (function() {
+    var socket = io(url, {
+        transports: ['websocket'],
+    });
+
     function qrCtrlFunc($scope, $http, $q) {
-        var socket = io(url, {
-            transports: ['websocket'],
-        });
+        init();
 
-        $scope.loginUrl = '';
-        $scope.clientList = [];
+        function init() {
+            $scope.loginUrl = '';
+            $scope.clientList = [];
+            $scope.createClientLogin = createClientLogin;
+            $scope.logout = logout;
+            $scope.clear = clear;
 
-        socket.on('sendMessage', function(data) {
-            console.log(socket.id);
-            console.log(data);
+            createQrcodeImage('generator', url, socket.id);
 
-            $scope.generatorUrl =
-                'hades://api?url=' + url + '/generator&hash=' + socket.id;
+            getClientList($scope, $http).then(function() {
+                if ($scope.clientList.length == 0) {
+                    return;
+                }
+                $scope.clientList[0].active = true;
+                createClientLogin($scope.clientList[0]);
+            });
 
-            getClientList($scope, $http);
-        });
+            setupWebSocket();
+        }
 
-        socket.on('newClient', function(data) {
-            console.log(socket.id);
-            console.log(data);
+        function getClientList($scope, $http) {
+            return $http.get('/client').then(function(result) {
+                $scope.clientList = result.data.clientList;
+            });
+        }
 
-            createClientLogin(data);
+        function clear() {
+            $scope.loginUrl = null;
+            $http.get('/clear?t=' + new Date().valueOf());
+        }
 
-            getClientList($scope, $http);
-        });
-
-        socket.on('refresh', function() {
-            getClientList($scope, $http);
-        });
-
-        createQrcodeImage('generator', url + '/generator', socket.id);
-
-        getClientList($scope, $http).then(function() {
-            if ($scope.clientList.length == 0) {
-                return;
-            }
-            $scope.clientList[0].active = true;
-            createClientLogin($scope.clientList[0]);
-        });
+        function logout() {
+            $scope.loginUrl = null;
+            $http.get('/logout?t=' + new Date().valueOf());
+        }
 
         function createClientLogin(client) {
             $scope.clientList.forEach(
                 c => (c.active = client.token === c.token)
             );
-            $scope.loginUrl = 'hades://api?url="' + url + '/login"' + '&hash=';
+            $scope.loginUrl = prepareUrl(url, 'login', '');
 
-            createQrcodeImage('login', url + '/login', '');
+            createQrcodeImage('login', url, '');
         }
 
-        $scope.createClientLogin = createClientLogin;
+        function setupWebSocket() {
+            socket.on('sendMessage', function(data) {
+                $scope.generatorUrl = prepareUrl(url, 'generator', socket.id);
+                getClientList($scope, $http);
+            });
 
-        $scope.logout = function() {
-            $scope.loginUrl = null;
-            $http.get('/logout?t=' + new Date().valueOf());
-        };
+            socket.on('newClient', function(data) {
+                createClientLogin(data);
+                getClientList($scope, $http);
+            });
 
-        $scope.clear = function() {
-            $scope.loginUrl = null;
-            $http.get('/clear?t=' + new Date().valueOf());
-        };
-    }
+            socket.on('refresh', function() {
+                getClientList($scope, $http);
+            });
+        }
 
-    function getClientList($scope, $http) {
-        return $http.get('/client').then(function(result) {
-            $scope.clientList = result.data.clientList;
-        });
-    }
+        function createQrcodeImage(qrcodeId, url, hash) {
+            var typeNumber = 8;
+            var errorCorrectionLevel = 'L';
+            var qr = qrcode(typeNumber, errorCorrectionLevel);
+            var qrvalue =
+                '{"url":"' +
+                url +
+                '","api":"' +
+                qrcodeId +
+                '","hash":"' +
+                hash +
+                '"}';
+            console.log(qrvalue);
+            qr.addData(qrvalue);
+            qr.make();
+            document.getElementById(qrcodeId)
+                ? (document.getElementById(
+                      qrcodeId
+                  ).innerHTML = qr.createImgTag())
+                : '';
+        }
 
-    function createQrcodeImage(qrcodeId, url, hash) {
-        var typeNumber = 8;
-        var errorCorrectionLevel = 'L';
-        var qr = qrcode(typeNumber, errorCorrectionLevel);
-        var qrvalue = '{"url":"' + url + '","hash":"' + hash + '"}';
-        console.log(qrvalue);
-        qr.addData(qrvalue);
-        qr.make();
-        document.getElementById(qrcodeId)
-            ? (document.getElementById(qrcodeId).innerHTML = qr.createImgTag())
-            : '';
+        function prepareUrl(url, api, hash) {
+            return [
+                'hades://api?',
+                'url="',
+                url,
+                '"&',
+                'api="',
+                api,
+                '"&',
+                'hash="',
+                hash,
+            ].join('');
+        }
     }
 
     var app = angular.module('qrApp', []).config([
@@ -89,5 +112,6 @@
             );
         },
     ]);
+
     app.controller('qrCtrl', ['$scope', '$http', '$q', qrCtrlFunc]);
 })();

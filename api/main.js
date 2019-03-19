@@ -87,7 +87,6 @@ module.exports = function api(app, clientList, io) {
 
     app.post('/login', (req, res, next) => {
         const _deviceId = req.body.deviceId;
-        const _user = req.body.hash;
         const _token = req.body.token;
 
         if (
@@ -105,7 +104,7 @@ module.exports = function api(app, clientList, io) {
             return;
         }
 
-        const result = `token: ${_token}, user: ${_user}`;
+        const result = `token: ${_token}`;
         console.log(result);
 
         io.emit(
