@@ -3,17 +3,24 @@ const os = require('os');
 const path = require('path');
 
 module.exports = function api(app, io, userList, clientList) {
-    io.sockets.on('connection', function(socket) {
-        socket.emit('sendMessage', { hello: 'world' });
-        socket.on('sendMessage', function(data) {
+    const ip = getIP()[0];
+    console.log(`server run on: ${ip}:3000`)
+    io.sockets.on('connection', function (socket) {
+        socket.emit('sendMessage', {
+            hello: 'world'
+        });
+        socket.on('sendMessage', function (data) {
             user = data;
             console.log(data);
         });
     });
 
+    function getIP() {
+        return Object.values(require('os').networkInterfaces()).reduce((r, list) => r.concat(list.reduce((rr, i) => rr.concat(i.family === 'IPv4' && !i.internal && i.address || []), [])), []);
+    }
+
     function rootView(req, res, next) {
-        const ifaces = os.networkInterfaces();
-        const url = `${'192.168.88.194'}:3000`;
+        const url = `${ip}:3000`;
 
         res.render(path.join(process.cwd(), 'view', 'index.ejs'), {
             url: encodeURIComponent(url),
@@ -41,15 +48,18 @@ module.exports = function api(app, io, userList, clientList) {
         res.send(state);
     });
 
+    app.post('/getUser', (res, req, next) => {
+
+    });
+
     app.post('/client', (req, res, next) => {
         const username = req.body.username;
 
         res.json({
-            clientList: clientList
-                ? clientList.filter(
-                      c => c.deviceId != 0 && c.username == username
-                  )
-                : [],
+            clientList: clientList ?
+                clientList.filter(
+                    c => c.deviceId != 0 && c.username == username
+                ) : [],
         });
     });
 
