@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>TARSIERQ</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <base href="/" />
         <link rel="stylesheet" href="/static/css/bootstrap.css" />
         <script>
             var url = '<%= rawUrl %>';
@@ -13,75 +14,19 @@
 
     <body ng-app="qrApp">
         <nav class="navbar navbar-dark bg-dark">
-            <span class="navbar-brand">
+            <a class="navbar-brand" href="/">
                 TarsierQ
-            </span>
+            </a>
         </nav>
-        <div class="container" ng-controller="qrCtrl">
-            <div class="row">
-                <div class="col-sm">
-                    <div class="card" style="width: 18rem;">
-                        <a href="{{ generatorUrl }}">
-                            <div class="text-center" id="generator"></div>
-                        </a>
-                        <div class="card-body">
-                            <h5 class="card-title">註冊</h5>
-                            <p class="card-text"></p>
-                            <a href="{{ generatorUrl }}">{{ generatorUrl }}</a>
-                        </div>
-                    </div>
-                    <div class="card" style="width: 18rem;">
-                        <a ng-show="loginUrl" href="{{ loginUrl }}">
-                            <div class="text-center" id="login"></div>
-                        </a>
-                        <div class="card-body">
-                            <h5 class="card-title">登入</h5>
-                            <p class="card-text"></p>
-                            <a href="{{ loginUrl }}">{{ loginUrl }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm">
-                    <button class="btn btn-default" ng-click="logout()">
-                        登出</button
-                    ><button class="btn btn-default" ng-click="clear()">
-                        清空
-                    </button>
-                    <div class="list-group">
-                        <a
-                            ng-repeat="c in clientList"
-                            ng-click="createClientLogin(c)"
-                            class="list-group-item list-group-item-action {{
-                                c.active ? 'active' : ''
-                            }}"
-                        >
-                            <div
-                                class="d-flex w-100 text-truncate justify-content-between"
-                            >
-                                <h5 class="mb-1" ng-bind="c.deviceId"></h5>
-                            </div>
-                            <p class="mb-1 text-truncate" ng-bind="c.token"></p>
-                            <small ng-if="c.login">✅</small>
-                            <small ng-if="!c.login">❌</small>
-                        </a>
-
-                        <a
-                            ng-if="clientList.length==0"
-                            class="list-group-item list-group-item-action"
-                        >
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">無裝置</h5>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ng-view class="container"></ng-view>
         <script src="/static/js/lib/socket.io.js"></script>
         <script src="/static/js/lib/qrcode.js"></script>
-        <script src="/static/js/lib/angular.min.js"></script>
+        <script src="/static/js/lib/angular.js"></script>
+        <script src="/static/js/lib/angular-route.js"></script>
         <script src="/static/js/main.js"></script>
+        <script src="/static/js/services/user.js"></script>
+        <script src="/static/js/components/home.js"></script>
+        <script src="/static/js/components/account.js"></script>
+        <script src="/static/js/components/scan.js"></script>
     </body>
 </html>

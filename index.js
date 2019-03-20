@@ -10,6 +10,22 @@ const clientList = [
         deviceId: 0,
         token: '',
         login: false,
+        username: 'admin',
+    },
+];
+
+const userList = [
+    {
+        username: 'user',
+        password: '123456',
+        socketId: null,
+        islogin: false,
+    },
+    {
+        username: 'nonDevice',
+        password: '123456',
+        socketId: null,
+        islogin: false,
     },
 ];
 
@@ -31,4 +47,5 @@ app.use(
 );
 
 app.use(bodyParser.json());
-api(app, clientList, io);
+// setup route
+api(app, io, userList, clientList);

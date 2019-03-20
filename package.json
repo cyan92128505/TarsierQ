@@ -10,6 +10,8 @@
   "author": "aomashinku",
   "license": "MIT",
   "dependencies": {
+    "angular": "^1.7.8",
+    "angular-route": "^1.7.8",
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
