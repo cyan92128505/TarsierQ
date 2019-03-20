@@ -71,14 +71,15 @@
             var typeNumber = 8;
             var errorCorrectionLevel = 'L';
             var qr = qrcode(typeNumber, errorCorrectionLevel);
-            var qrvalue =
-                '{"url":"' +
-                url +
-                '","api":"' +
-                qrcodeId +
-                '","hash":"' +
-                hash +
-                '"}';
+            // var qrvalue =
+            //     '{"url":"' +
+            //     url +
+            //     '","api":"' +
+            //     qrcodeId +
+            //     '","hash":"' +
+            //     hash +
+            //     '"}';
+            var qrvalue = prepareUrl(url, qrcodeId, hash);
             console.log(qrvalue);
             qr.addData(qrvalue);
             qr.make();
@@ -92,13 +93,13 @@
         function prepareUrl(url, api, hash) {
             return [
                 'hades://api?',
-                'url="',
+                'url=',
                 url,
-                '"&',
-                'api="',
+                '&',
+                'api=',
                 api,
-                '"&',
-                'hash="',
+                '&',
+                'hash=',
                 hash,
             ].join('');
         }
