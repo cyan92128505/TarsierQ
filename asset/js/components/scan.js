@@ -52,6 +52,7 @@ function ScanController(
             '&',
             'hash=',
             hash,
+            `.${userService.getUser().username}`,
         ].join('');
     }
 }
