@@ -2,6 +2,7 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 const api = require(path.join(process.cwd(), 'api', 'main.js'));
 
@@ -30,7 +31,7 @@ const userList = [
 ];
 
 const app = express();
-
+app.use(morgan('combined'));
 app.set('view engine', 'ejs');
 
 const server = app.listen(3000);
