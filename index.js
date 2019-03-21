@@ -22,7 +22,7 @@ const userList = [
         islogin: false,
     },
     {
-        username: 'nonDevice',
+        username: 'non',
         password: '123456',
         socketId: null,
         islogin: false,
@@ -43,7 +43,7 @@ app.use('/static', express.static(path.join(process.cwd(), 'asset')));
 app.use(
     bodyParser.urlencoded({
         extended: true,
-    })
+    }),
 );
 
 app.use(bodyParser.json());

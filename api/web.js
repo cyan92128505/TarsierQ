@@ -54,10 +54,8 @@ module.exports = function api(app, io, userList, clientList) {
     });
 
     app.get('/clear', (req, res, next) => {
-        const username = req.body.username;
-
-        clientList = clientList.filter(c => c.username != username);
-        io.emit('refresh', username);
+        clientList.splice(1);
+        io.emit('refresh');
         res.json({
             clientList: clientList,
         });

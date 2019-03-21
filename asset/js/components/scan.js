@@ -30,13 +30,6 @@ function ScanController(
         $scope.$apply();
     });
 
-    $socket.on('refresh', function() {
-        console.log('refresh');
-        userService.getClientList().then(function() {
-            $location.url('/');
-        });
-    });
-
     function createQrcodeImage(url, api, socketId) {
         var typeNumber = 8;
         var errorCorrectionLevel = 'L';

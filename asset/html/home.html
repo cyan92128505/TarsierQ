@@ -8,7 +8,7 @@
             />
             <div class="card-body">
                 <h5 class="card-title">Login</h5>
-                <form name="form">
+                <form name="form" ng-submit="vm.login()">
                     <div class="form-group">
                         <label>Username</label>
                         <input
@@ -29,11 +29,7 @@
                             required
                         />
                     </div>
-                    <button
-                        type="button"
-                        class="btn btn-primary"
-                        ng-click="vm.login()"
-                    >
+                    <button type="submit" class="btn btn-primary">
                         Login
                     </button>
 
