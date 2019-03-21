@@ -16,13 +16,13 @@ module.exports = function api(app, io, userList, clientList) {
                 }
                 return state;
             }).length != 0;
-        res.json(state ? currentUser : null);
+        return res.json(state ? currentUser : null);
     });
 
     app.post('/client', (req, res, next) => {
         const username = req.body.username;
 
-        res.json({
+        return res.json({
             clientList: clientList
                 ? clientList.filter(
                       c => c.deviceId != 0 && c.username == username,
@@ -47,7 +47,7 @@ module.exports = function api(app, io, userList, clientList) {
 
         io.to(socketId || currentUser.socketId).emit('refresh');
 
-        res.json({
+        return res.json({
             clientList: clientList,
         });
     });
@@ -55,15 +55,32 @@ module.exports = function api(app, io, userList, clientList) {
     app.get('/clear', (req, res, next) => {
         clientList.splice(1);
         io.emit('refresh');
-        res.json({
+        return res.json({
             clientList: clientList,
         });
     });
 
     app.use('/all', (req, res, next) => {
-        res.json({
+        return res.json({
             userList: userList,
             clientList: clientList,
         });
+    });
+
+    app.post('/remove', (req, res, next) => {
+        const deviceId = req.body.deviceId;
+        const username = req.body.username;
+
+        const tmpList = clientList.filter(
+            c =>
+                c.deveiceId != deviceId &&
+                c.username != username &&
+                c.deveiceId != 0,
+        );
+
+        clientList.splice(1);
+        clientList.concat(tmpList);
+
+        return res.json(clientList.filter(c => c.username === username));
     });
 };

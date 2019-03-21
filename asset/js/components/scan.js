@@ -13,11 +13,9 @@ function ScanController(
     if (!userService.getUser().isLogin) {
         $location.url('/');
     }
-
-    var api =
-        (userService.getUser().deviceList || []).length > 0
-            ? 'login'
-            : 'generator';
+    var qrState = (userService.getUser().deviceList || []).length > 0;
+    var api = qrState ? 'login' : 'generator';
+    vm.qrText = qrState ? '登入' : '註冊';
 
     if ($socket.id) {
         vm.url = prepareUrl(url, api, $socket.id);
