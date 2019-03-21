@@ -13,18 +13,16 @@
     </head>
 
     <body ng-app="qrApp">
-        <nav class="navbar navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">
-                TarsierQ
-            </a>
-        </nav>
-        <ng-view class="container"></ng-view>
+        <navbar-component></navbar-component>
+        <ng-view class="container" />
         <script src="/static/js/lib/socket.io.js"></script>
         <script src="/static/js/lib/qrcode.js"></script>
         <script src="/static/js/lib/angular.js"></script>
         <script src="/static/js/lib/angular-route.js"></script>
+        <script src="/static/js/lib/angular-local-storage.js"></script>        
         <script src="/static/js/main.js"></script>
         <script src="/static/js/services/user.js"></script>
+        <script src="/static/js/components/navbar.js"></script>
         <script src="/static/js/components/home.js"></script>
         <script src="/static/js/components/account.js"></script>
         <script src="/static/js/components/scan.js"></script>

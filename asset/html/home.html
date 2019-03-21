@@ -7,13 +7,12 @@
                 alt="Card image cap"
             />
             <div class="card-body">
-                <h5 class="card-title">AB005-01 Portal</h5>
-                <form name="form" novalidate>
+                <h5 class="card-title">Login</h5>
+                <form name="form">
                     <div class="form-group">
                         <label>Username</label>
                         <input
-                            type="email"
-                            name="uname"
+                            type="text"
                             ng-model="vm.user.username"
                             class="form-control"
                             placeholder="Enter username"
@@ -24,7 +23,6 @@
                         <label>Password</label>
                         <input
                             type="password"
-                            name="password"
                             ng-model="vm.user.password"
                             class="form-control"
                             placeholder="Password"
@@ -38,6 +36,10 @@
                     >
                         Login
                     </button>
+
+                    <div class="invalid-feedback d-block" ng-if="vm.invalid">
+                        帳號密碼錯誤
+                    </div>
                 </form>
             </div>
         </div>

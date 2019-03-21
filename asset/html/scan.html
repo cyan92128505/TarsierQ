@@ -8,7 +8,15 @@
             />
             <div class="card-body">
                 <h5 class="card-title">Scan</h5>
-                <div class="text-center" id="qr-code"></div>
+                <h1 class="text-center">
+                    <img
+                        class="img-fluid rounded"
+                        width="200"
+                        height="200"
+                        ng-src="{{ vm.qrcodeImg }}"
+                    />
+                </h1>
+                <a href="{{ vm.url }}">{{ vm.url }}</a>
             </div>
         </div>
     </div>

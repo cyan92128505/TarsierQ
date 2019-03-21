@@ -1,18 +1,37 @@
-function HomeController($scope, $element, $attrs, $http, $location) {
+function HomeController(
+    $scope,
+    $element,
+    $attrs,
+    $http,
+    $location,
+    userService,
+) {
     var vm = this;
+
     vm.user = {
         username: '',
         password: '',
     };
 
     vm.login = function() {
-        console.log(vm.user);
-        $http.get('/weblogin', vm.user).then(function(res) {
-            if (res) {
-                $location.replace('/');
-            }
-        });
+        userService
+            .login(vm.user.username, vm.user.password)
+            .then(function(res) {
+                console.log(!res.data);
+                if (!res.data) {
+                    vm.invalid = true;
+                    return;
+                }
+                vm.invalid = false;
+                userService.setupUser(res.data).then(function(needScan) {
+                    $location.url(needScan ? '/scan' : '/account');
+                });
+            });
     };
+
+    if (userService.getUser().isLogin) {
+        $location.url('/account');
+    }
 }
 
 app.component('homeComponent', {
@@ -23,6 +42,7 @@ app.component('homeComponent', {
         '$attrs',
         '$http',
         '$location',
+        'userService',
         HomeController,
     ],
     controllerAs: 'vm',

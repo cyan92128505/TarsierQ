@@ -7,12 +7,15 @@
                 alt="Card image cap"
             />
             <div class="card-body">
-                <h5 class="card-title">Account</h5>
+                <h5 class="card-title">Hi {{ vm.user }}</h5>
+                <h5 class="card-title" ng-if="!vm.hasDevice">
+                    <a href="/scan">綁定裝置？</a>
+                </h5>
                 <form name="form" novalidate>
                     <button
                         type="button"
                         class="btn btn-primary"
-                        ng-click="vm.login()"
+                        ng-click="vm.logout()"
                     >
                         Logout
                     </button>
