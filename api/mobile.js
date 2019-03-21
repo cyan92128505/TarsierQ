@@ -23,8 +23,8 @@ module.exports = function api(app, io, userList, clientList) {
             return;
         }
 
-        if (clientList.some(e => e.deviceId === _deviceId) && !!currentUser) {
-            console.log(errorMsg.existDeviceId, clientList);
+        if (clientList.some(e => e.deviceId === _deviceId) && !currentUser) {
+            console.log(errorMsg.existDeviceId, currentUser, clientList);
             res.send(errorMsg.existDeviceId);
             return;
         }
@@ -63,7 +63,10 @@ module.exports = function api(app, io, userList, clientList) {
 
         if (
             !clientList.some(c => {
-                const state = c.deviceId === _deviceId && c.token === _token;
+                const state =
+                    c.deviceId === _deviceId &&
+                    c.token === _token &&
+                    c.username === _username;
                 if (state) {
                     c.login = true;
                 }

@@ -15,7 +15,7 @@ function AccountController(
         });
     };
 
-    if (!userService.getUser().isLogin) {
+    if (!userService.detectState()) {
         $location.url('/');
     }
 }

@@ -37,11 +37,20 @@ app.factory('userService', [
                 });
             },
 
+            detectState: function() {
+                return (
+                    user.isLogin &&
+                    (user.deviceList.length == 0 ||
+                        user.deviceList.filter(d => d.login).length > 0)
+                );
+            },
+
             logout: function() {
+                var targetUser = user.username;
                 user.isLogin = false;
                 localStorageService.remove('user');
-                return $http.post('/logout?t=' + new Date().valueOf(), {
-                    username: user.username,
+                return $http.post('/logout', {
+                    username: targetUser,
                 });
             },
         };

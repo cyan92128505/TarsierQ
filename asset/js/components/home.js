@@ -29,7 +29,7 @@ function HomeController(
             });
     };
 
-    if (userService.getUser().isLogin) {
+    if (userService.detectState()) {
         $location.url('/account');
     }
 }

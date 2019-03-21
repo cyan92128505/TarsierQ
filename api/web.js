@@ -31,13 +31,12 @@ module.exports = function api(app, io, userList, clientList) {
         });
     });
 
-    app.get('/logout', (req, res, next) => {
+    app.post('/logout', (req, res, next) => {
+        const username = req.body.username;
         const socketId = req.header('socketId');
-        if (!socketId) {
-            return res.send();
-        }
 
-        const currentUser = userList.filter(u => u.socketId === socketId)[0];
+        const currentUser = userList.filter(u => u.username === username)[0];
+
         if (!currentUser) {
             return res.send();
         }
@@ -46,7 +45,7 @@ module.exports = function api(app, io, userList, clientList) {
             .filter(c => c.username === currentUser.username)
             .forEach(c => (c.login = false));
 
-        io.to(currentUser.socketId).emit('refresh');
+        io.to(socketId || currentUser.socketId).emit('refresh');
 
         res.json({
             clientList: clientList,
@@ -57,6 +56,13 @@ module.exports = function api(app, io, userList, clientList) {
         clientList.splice(1);
         io.emit('refresh');
         res.json({
+            clientList: clientList,
+        });
+    });
+
+    app.use('/all', (req, res, next) => {
+        res.json({
+            userList: userList,
             clientList: clientList,
         });
     });
