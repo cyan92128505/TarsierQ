@@ -32,11 +32,11 @@ module.exports = function api(app, io, userList, clientList) {
         const secret = 'tarsier';
         const token = crypto
             .createHmac('sha256', secret)
-            .update(req.body.deviceId)
+            .update(_deviceId + _socketId + _username)
             .digest('hex');
 
         const client = {
-            deviceId: req.body.deviceId,
+            deviceId: _deviceId,
             token: token,
             login: true,
             username: currentUser.username,
