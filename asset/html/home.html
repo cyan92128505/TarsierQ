@@ -50,7 +50,7 @@
 
                     <div class="invalid-feedback d-block" ng-if="vm.invalid">
                         {{
-                            vm.vaildCheckNumber === vm.validnumber
+                            vm.vaildCheckNumber === vm.validNumber
                                 ? '帳號密碼'
                                 : '驗證碼'
                         }}錯誤
@@ -67,19 +67,13 @@
     role="dialog"
     aria-labelledby="validModalLabel"
     aria-hidden="true"
+    data-backdrop="static"
+    data-keyboard="false"
 >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="validModalLabel">Modal title</h5>
-                <button
-                    type="button"
-                    class="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                >
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="validModalLabel">驗證碼</h5>
             </div>
             <div class="modal-body">
                 <div id="container"></div>
