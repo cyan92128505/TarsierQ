@@ -11,7 +11,7 @@ function HomeController(
     var vm = this;
     var deferred = $q.defer();
     var promise = deferred.promise;
-    promise.then(function() {
+    promise.then(function () {
         loginAction();
     });
 
@@ -20,27 +20,28 @@ function HomeController(
         password: '',
     };
 
-    vm.vaildCheckNumber = getRandomFourInt();
+    // vm.vaildCheckNumber = getRandomFourInt();
 
-    jigsaw.init({
-        el: document.getElementById('container'),
-        onSuccess: function() {
-            deferred.resolve();
-        },
-        onFail: function() {
-            $('#validModal').modal('hide');
-        },
-        onRefresh: function() {
-            $('#validModal').modal('hide');
-        },
-    });
+    // jigsaw.init({
+    //     el: document.getElementById('container'),
+    //     onSuccess: function() {
+    //         deferred.resolve();
+    //     },
+    //     onFail: function() {
+    //         $('#validModal').modal('hide');
+    //     },
+    //     onRefresh: function() {
+    //         $('#validModal').modal('hide');
+    //     },
+    // });
 
-    vm.login = function() {
-        if (vm.vaildCheckNumber != vm.validNumber) {
-            vm.invalid = true;
-            return;
-        }
-        $('#validModal').modal('show');
+    vm.login = function () {
+        // if (vm.vaildCheckNumber != vm.validNumber) {
+        //     vm.invalid = true;
+        //     return;
+        // }
+        // $('#validModal').modal('show');
+        loginAction();
     };
 
     if (userService.detectState()) {
@@ -57,16 +58,16 @@ function HomeController(
     function loginAction() {
         userService
             .login(vm.user.username, vm.user.password)
-            .then(function(res) {
+            .then(function (res) {
                 console.log(!res.data);
-                $('#validModal').modal('hide');
+                // $('#validModal').modal('hide');
                 if (!res.data) {
                     vm.invalid = true;
                     return;
                 }
                 vm.invalid = false;
-                $timeout(function() {
-                    userService.setupUser(res.data).then(function(needScan) {
+                $timeout(function () {
+                    userService.setupUser(res.data).then(function (needScan) {
                         $location.url(needScan ? '/scan' : '/account');
                     });
                 }, 600);
