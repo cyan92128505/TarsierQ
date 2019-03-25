@@ -9,9 +9,12 @@
                 </h5>
                 <p>
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="d in vm.deviceList">
+                        <li class="list-group-item justify-content-between" ng-repeat="d in vm.deviceList">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-1">📱</h5>
+                                <small><i ng-click="vm.remove(d)" style="cursor: pointer;">❌</i></small>
+                            </div>
                             <span ng-bind="d.deviceId"></span>
-                            <i ng-click="vm.remove(d)">❌</i>
                         </li>
                     </ul>
                 </p>
