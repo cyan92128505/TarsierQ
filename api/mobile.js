@@ -7,6 +7,7 @@ const errorMsg = {
 module.exports = function api(app, io, userList, clientList) {
     app.post('/generator', (req, res, next) => {
         const _deviceId = req.body.deviceId || null;
+        const _deviceName = req.body.deviceName || null;
         const _socketId = req.body.hash.split('.')[0];
         const _username = req.body.hash.split('.')[1];
         const currentUser = userList.filter(u => u.username === _username)[0];
@@ -37,6 +38,7 @@ module.exports = function api(app, io, userList, clientList) {
 
         const client = {
             deviceId: _deviceId,
+            deviceName: _deviceName,
             token: token,
             login: true,
             username: currentUser.username,

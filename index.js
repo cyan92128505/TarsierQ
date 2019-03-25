@@ -9,6 +9,7 @@ const api = require(path.join(process.cwd(), 'api', 'main.js'));
 const clientList = [
     {
         deviceId: 0,
+        deviceName: '',
         token: '',
         login: false,
         username: 'admin',
