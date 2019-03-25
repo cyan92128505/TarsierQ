@@ -31,7 +31,11 @@ const userList = [
 ];
 
 const app = express();
-app.use(morgan('combined'));
+app.use(
+    morgan('tiny', {
+        skip: (req, res) => /static|\.ico/.test(req.originalUrl),
+    }),
+);
 app.set('view engine', 'ejs');
 
 const server = app.listen(3000);
