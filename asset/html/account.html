@@ -3,7 +3,9 @@
         <div class="card">
             <img class="card-img-top" src="/static/img/account.jpg" alt="Card image cap" />
             <div class="card-body">
-                <h5 class="card-title">Hi {{ vm.user }}</h5>
+                <h5 class="card-title">Hi 
+                    <code ng-bind="vm.user"></code>
+                </h5>
                 <h5 class="card-title" ng-if="!vm.hasDevice">
                     <a href="/scan">綁定裝置？</a>
                 </h5>
