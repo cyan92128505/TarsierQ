@@ -35,7 +35,13 @@ module.exports = function api(app, io, userList, clientList) {
         const username = req.body.username;
         const socketId = req.header('socketId');
 
-        const currentUser = userList.filter(u => u.username === username)[0];
+        const currentUser = userList.filter(u => {
+            const state = u.username === username;
+            if (state) {
+                u.islogin = false;
+            }
+            return state;
+        })[0];
 
         if (!currentUser) {
             return res.send();
