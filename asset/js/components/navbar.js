@@ -10,7 +10,7 @@ function NavbarController(
     var vm = this;
     $socket.on('connect', () => {
         vm.socketId = $socket.id;
-        $scope.$apply();
+        userService.safeApply($scope);
     });
 
     $socket.on('refresh', function() {

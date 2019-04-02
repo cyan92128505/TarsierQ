@@ -18,40 +18,46 @@ function ScanController(
     vm.qrText = qrState ? '登入' : '註冊';
 
     if ($socket.id) {
-        vm.url = prepareUrl(url, api, $socket.id);
-        vm.qrcodeImg = createQrcodeImage(url, api, $socket.id);
+        getQRCode(url, api, $socket.id).then(res => {
+            vm.url = prepareUrl(res.data);
+            vm.qrcodeImg = createQrcodeImage();
+        });
     }
 
     $socket.on('connect', function() {
-        vm.url = prepareUrl(url, api, $socket.id);
-        vm.qrcodeImg = createQrcodeImage(url, api, $socket.id);
-        $scope.$apply();
+        getQRCode(url, api, $socket.id).then(res => {
+            vm.url = prepareUrl(res.data);
+            vm.qrcodeImg = createQrcodeImage();
+            userService.safeApply($scope);
+        });
     });
 
-    function createQrcodeImage(url, api, socketId) {
+    function createQrcodeImage() {
         var typeNumber = 8;
         var errorCorrectionLevel = 'L';
         var qr = qrcode(typeNumber, errorCorrectionLevel);
-        var qrvalue = prepareUrl(url, api, socketId);
+        var qrvalue = vm.url;
         console.log(qrvalue);
         qr.addData(qrvalue);
         qr.make();
         return qr.createDataURL();
     }
 
-    function prepareUrl(url, api, hash) {
-        return [
-            'hades://api?',
-            'url=',
-            url,
-            '&',
-            'api=',
-            api,
-            '&',
-            'hash=',
-            hash,
-            `.${userService.getUser().username}`,
-        ].join('');
+    function prepareUrl(code) {
+        return 'charon://app/#' + code;
+    }
+
+    function getQRCode(url, api, socketId) {
+        var option = {
+            url: 'http://' + url + '/pingpong',
+            key: socketId + '.' + userService.getUser().username,
+            type: api === 'generator' ? '1' : '2',
+        };
+        if (api === 'login') {
+            option.token = option.key;
+        }
+
+        return $http.post('/qr', option);
     }
 }
 

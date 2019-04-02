@@ -1,3 +1,5 @@
+const crypto = require('./crypto');
+
 module.exports = function api(app, io, userList, clientList) {
     app.post('/weblogin', (req, res, next) => {
         const socketId = req.header('socketId');
@@ -88,5 +90,17 @@ module.exports = function api(app, io, userList, clientList) {
         clientList.concat(tmpList);
 
         return res.json(clientList.filter(c => c.username === username));
+    });
+
+    app.post('/qr', (req, res, next) => {
+        const optionString = JSON.stringify(req.body);
+        console.log(optionString);
+        const encrypted = crypto.encrypt(optionString);
+        return res.send(encrypted);
+    });
+
+    app.post('/pingpong', (req, res, next) => {
+        console.log(req.body);
+        return res.send(req.body);
     });
 };

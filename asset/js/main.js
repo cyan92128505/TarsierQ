@@ -1,9 +1,7 @@
 var app = angular.module('qrApp', ['ngRoute', 'LocalStorageModule']).config([
     '$compileProvider',
     function($compileProvider) {
-        $compileProvider.aHrefSanitizationWhitelist(
-            /^\s*(https?|ftp|mailto|chrome-extension|hades):/,
-        );
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(.+):/);
     },
 ]);
 
@@ -55,6 +53,7 @@ app.config([
             .when('/', { template: '<home-component />' })
             .when('/account', { template: '<account-component />' })
             .when('/scan', { template: '<scan-component />' })
+            .when('/pingpong', { template: '<home-component />' })
             .otherwise({
                 template: '<h1>404</h1>',
             });

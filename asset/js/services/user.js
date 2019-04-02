@@ -53,6 +53,17 @@ app.factory('userService', [
                     username: targetUser,
                 });
             },
+
+            safeApply: function($scope, fn) {
+                var phase = $scope.$root.$$phase;
+                if (phase == '$apply' || phase == '$digest') {
+                    if (fn && typeof fn === 'function') {
+                        fn();
+                    }
+                } else {
+                    $scope.$apply(fn);
+                }
+            },
         };
 
         if (!!_user.username && !!_user.isLogin) {

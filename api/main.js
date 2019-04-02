@@ -47,6 +47,7 @@ module.exports = function api(app, io, userList, clientList) {
     app.get('/scan', rootView);
     app.get('/account', rootView);
     app.get('/404', rootView);
+    app.get('/pingpong', rootView);
 
     webApi(app, io, userList, clientList);
     mobileApi(app, io, userList, clientList);
