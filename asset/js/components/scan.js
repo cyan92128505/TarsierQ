@@ -24,7 +24,7 @@ function ScanController(
         });
     }
 
-    $socket.on('connect', function() {
+    $socket.on('connect', function () {
         getQRCode(url, api, $socket.id).then(res => {
             vm.url = prepareUrl(res.data);
             vm.qrcodeImg = createQrcodeImage();
@@ -51,7 +51,7 @@ function ScanController(
         var option = {
             url: 'http://' + url + '/pingpong',
             key: socketId + '.' + userService.getUser().username,
-            type: api === 'generator' ? '1' : '2',
+            type: api === 'generator' ? 1 : 2,
         };
         if (api === 'login') {
             option.token = option.key;

@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>TARSIERQ</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <base href="/" />
-        <link rel="stylesheet" href="/static/css/bootstrap.css" />
-        <script>
-            var url = '<%= rawUrl %>';
-        </script>
-    </head>
 
-    <body ng-app="qrApp">
-        <navbar-component></navbar-component>
-        <div class="container mt-3">
-            <ng-view></ng-view>
-        </div>
-        <script src="/static/js/lib/socket.io.js"></script>
-        <script src="/static/js/lib/qrcode.js"></script>
-        <script src="/static/js/lib/jigsaw.min.js"></script>
-        <script src="/static/js/lib/jquery-3.3.1.min.js"></script>
-        <script src="/static/js/lib/bootstrap.js"></script>
-        <script src="/static/js/lib/angular.js"></script>
-        <script src="/static/js/lib/angular-route.js"></script>
-        <script src="/static/js/lib/angular-local-storage.js"></script>
-        <script src="/static/js/main.js"></script>
-        <script src="/static/js/services/user.js"></script>
-        <script src="/static/js/components/navbar.js"></script>
-        <script src="/static/js/components/home.js"></script>
-        <script src="/static/js/components/account.js"></script>
-        <script src="/static/js/components/scan.js"></script>
-    </body>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>TARSIERQ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <base href="/" />
+    <link rel="stylesheet" href="/static/css/bootstrap.css" />
+    <script>
+        var url = '<%= rawUrl %>';
+    </script>
+</head>
+
+<body ng-app="qrApp">
+    <navbar-component></navbar-component>
+    <div class="container mt-3">
+        <ng-view></ng-view>
+    </div>
+    <script src="/static/js/lib/socket.io.js"></script>
+    <script src="/static/js/lib/qrcode.js"></script>
+    <script src="/static/js/lib/jigsaw.min.js"></script>
+    <script src="/static/js/lib/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/lib/bootstrap.js"></script>
+    <script src="/static/js/lib/angular.js"></script>
+    <script src="/static/js/lib/angular-route.js"></script>
+    <script src="/static/js/lib/angular-local-storage.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/services/user.js"></script>
+    <script src="/static/js/components/navbar.js"></script>
+    <script src="/static/js/components/home.js"></script>
+    <script src="/static/js/components/account.js"></script>
+    <script src="/static/js/components/scan.js"></script>
+</body>
+
 </html>

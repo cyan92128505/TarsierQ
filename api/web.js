@@ -25,11 +25,10 @@ module.exports = function api(app, io, userList, clientList) {
         const username = req.body.username;
 
         return res.json({
-            clientList: clientList
-                ? clientList.filter(
-                      c => c.deviceId != 0 && c.username == username,
-                  )
-                : [],
+            clientList: clientList ?
+                clientList.filter(
+                    c => c.deviceId != 0 && c.username == username,
+                ) : [],
         });
     });
 
@@ -81,9 +80,9 @@ module.exports = function api(app, io, userList, clientList) {
 
         const tmpList = clientList.filter(
             c =>
-                c.deveiceId != deviceId &&
-                c.username != username &&
-                c.deveiceId != 0,
+            c.deveiceId != deviceId &&
+            c.username != username &&
+            c.deveiceId != 0,
         );
 
         clientList.splice(1);
@@ -96,11 +95,13 @@ module.exports = function api(app, io, userList, clientList) {
         const optionString = JSON.stringify(req.body);
         console.log(optionString);
         const encrypted = crypto.encrypt(optionString);
+        console.log(encrypted);
         return res.send(encrypted);
     });
 
     app.post('/pingpong', (req, res, next) => {
         console.log(req.body);
         return res.send(req.body);
+        //return res.status(404).end('SCAN ERROR');
     });
 };
