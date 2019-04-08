@@ -3,33 +3,35 @@ const webApi = require(path.join(process.cwd(), 'api', 'web.js'));
 const mobileApi = require(path.join(process.cwd(), 'api', 'mobile.js'));
 
 module.exports = function api(app, io, userList, clientList) {
-    const ip = getIP()[0];
+    console.log(getIPList());
+    // find local ip
+    const ip = (getIPList().filter(u => /192/.test(u)) || ['localhost'])[0];
+
     console.log(`server on: ${ip}:3000`);
-    io.sockets.on('connection', function(socket) {
+    io.sockets.on('connection', function (socket) {
         socket.emit('sendMessage', {
             hello: 'world',
         });
-        socket.on('sendMessage', function(data) {
+        socket.on('sendMessage', function (data) {
             user = data;
             console.log(data);
         });
     });
 
-    function getIP() {
+    function getIPList() {
         return Object.values(require('os').networkInterfaces()).reduce(
             (r, list) =>
-                r.concat(
-                    list.reduce(
-                        (rr, i) =>
-                            rr.concat(
-                                (i.family === 'IPv4' &&
-                                    !i.internal &&
-                                    i.address) ||
-                                    [],
-                            ),
-                        [],
+            r.concat(
+                list.reduce(
+                    (rr, i) =>
+                    rr.concat(
+                        (i.family === 'IPv4' &&
+                            !i.internal &&
+                            i.address) || [],
                     ),
+                    [],
                 ),
+            ),
             [],
         );
     }
