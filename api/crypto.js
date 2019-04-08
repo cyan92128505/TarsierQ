@@ -1,7 +1,18 @@
 const crypto = require('crypto');
+const path = require('path');
 const algorithm = 'aes-128-cbc';
-const key = new Buffer.from('0000000000000000', 'utf8');
-const iv = new Buffer.from('0000000000000000', 'utf8');
+let keyConfig = {
+    key: '0000000000000000',
+    iv: '0000000000000000'
+};
+try {
+    keyConfig = require(path.join(process.cwd(), 'config', 'key.json'));
+} catch (error) {
+    console.log('NO CONFIG FOR AES!');
+}
+console.log(keyConfig);
+const key = new Buffer.from(keyConfig.key, 'utf8');
+const iv = new Buffer.from(keyConfig.iv, 'utf8');
 
 function encrypt(data) {
     const cipher = crypto.createCipheriv(algorithm, key, iv);
