@@ -1,13 +1,17 @@
+const fs = require('fs-extra');
 const crypto = require('crypto');
 const path = require('path');
 const algorithm = 'aes-128-cbc';
+let keyConfigPath = path.join(process.cwd(), 'config', 'key.json');
 let keyConfig = {
     key: '0000000000000000',
     iv: '0000000000000000'
 };
 try {
-    keyConfig = require(path.join(process.cwd(), 'config', 'key.json'));
+    keyConfig = fs.readJSONSync(path.join(process.cwd(), 'config', 'key.json'));
 } catch (error) {
+    fs.ensureFileSync(keyConfigPath);
+    fs.writeJSONSync(keyConfigPath, keyConfig);
     console.log('NO CONFIG FOR AES!');
 }
 console.log(keyConfig);
