@@ -12,8 +12,8 @@ program.parse(process.argv);
 
 let keyConfigPath = path.join(process.cwd(), 'config', 'key.json');
 let keyConfig = {
-    key: '0000000000000000',
-    iv: '0000000000000000'
+    key: process.env.APP_KEY || '0000000000000000',
+    iv: process.env.APP_IV || '0000000000000000'
 };
 
 program.args.forEach(a => {
