@@ -5,7 +5,7 @@ const mobileApi = require(path.join(process.cwd(), 'api', 'mobile.js'));
 module.exports = function api(app, io, userList, clientList) {
     console.log(getIPList());
     // find local ip
-    const ip = (getIPList().filter(u => /192/.test(u)) || ['localhost'])[0];
+    const ip = (getIPList().filter(u => /192/.test(u) || /172/.test(u)) || ['localhost'])[0];
 
     console.log(`server on: ${ip}`);
     io.sockets.on('connection', function (socket) {
@@ -37,12 +37,7 @@ module.exports = function api(app, io, userList, clientList) {
     }
 
     function rootView(req, res, next) {
-        const url = `${ip}:3000`;
-
-        res.render(path.join(process.cwd(), 'view', 'index.ejs'), {
-            url: encodeURIComponent(url),
-            rawUrl: url,
-        });
+        res.render(path.join(process.cwd(), 'view', 'index.ejs'));
     }
 
     app.get('/', rootView);

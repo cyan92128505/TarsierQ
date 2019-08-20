@@ -49,7 +49,7 @@ function ScanController(
 
     function getQRCode(url, api, socketId) {
         var option = {
-            url: 'http://' + url + '/' + api,
+            url: url + '/' + api,
             key: socketId + '.' + userService.getUser().username,
             type: api === 'generator' ? 1 : 2,
         };
