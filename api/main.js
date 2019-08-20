@@ -7,7 +7,7 @@ module.exports = function api(app, io, userList, clientList) {
     // find local ip
     const ip = (getIPList().filter(u => /192/.test(u)) || ['localhost'])[0];
 
-    console.log(`server on: ${ip}:3000`);
+    console.log(`server on: ${ip}`);
     io.sockets.on('connection', function (socket) {
         socket.emit('sendMessage', {
             hello: 'world',
