@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js -k APP_KEY -i APP_IV",
+    "start": "node index.js --app-key APP_KEY --app-iv APP_IV",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "aomashinku",
