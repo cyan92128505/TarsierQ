@@ -49,12 +49,7 @@ module.exports = function api(app, io, userList, clientList) {
         console.log(`io.to(${_socketId}).emit('refresh');`);
         io.to(_socketId).emit('refresh');
 
-        const result = `{"token": "${token}", "user": "${
-            currentUser.username
-        }"}`;
-
-        console.log(result);
-        res.send(result);
+        return res.json(client);
     });
 
     app.post('/login', (req, res, next) => {
@@ -99,6 +94,6 @@ module.exports = function api(app, io, userList, clientList) {
 
         console.log(`io.to(${_socketId}).emit('refresh');`);
         io.to(_socketId).emit('refresh');
-        res.send(result);
+        return res.json(targetUser);
     });
 };

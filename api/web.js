@@ -1,4 +1,6 @@
 const crypto = require('./crypto');
+const multiparty = require('multiparty');
+
 
 module.exports = function api(app, io, userList, clientList) {
     app.post('/weblogin', (req, res, next) => {
@@ -100,8 +102,10 @@ module.exports = function api(app, io, userList, clientList) {
     });
 
     app.post('/pingpong', (req, res, next) => {
-        console.log(req.body);
-        return res.send(req.body);
-        //return res.status(404).end('SCAN ERROR');
+        let formParser = new multiparty.Form();
+        formParser.parse(req, function (err, fields, files) {
+            console.log(`'/pingpong':${JSON.stringify(fields)}`);
+            return res.json(fields);
+        });
     });
 };

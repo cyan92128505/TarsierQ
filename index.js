@@ -6,18 +6,15 @@ const morgan = require('morgan');
 
 const api = require(path.join(process.cwd(), 'api', 'main.js'));
 
-const clientList = [
-    {
-        deviceId: 0,
-        deviceName: '',
-        token: '',
-        login: false,
-        username: 'admin',
-    },
-];
+const clientList = [{
+    deviceId: 0,
+    deviceName: '',
+    token: '',
+    login: false,
+    username: 'admin',
+}, ];
 
-const userList = [
-    {
+const userList = [{
         username: 'user',
         password: '123456',
         socketId: null,
@@ -53,5 +50,6 @@ app.use(
 );
 
 app.use(bodyParser.json());
+
 // setup route
 api(app, io, userList, clientList);
