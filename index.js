@@ -36,7 +36,7 @@ app.use(
 );
 app.set('view engine', 'ejs');
 
-const server = app.listen(3000);
+const server = app.listen(80);
 
 const io = require('socket.io')(server, {
     transports: ['websocket'],
