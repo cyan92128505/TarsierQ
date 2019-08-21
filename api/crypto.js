@@ -13,8 +13,10 @@ program.parse(process.argv);
 let keyConfigPath = path.join(process.cwd(), 'config', 'key.json');
 let keyConfig = {
     key: process.env.APP_KEY || '0000000000000000',
-    iv: process.env.APP_IV || '0000000000000000'
+    iv: process.env.APP_IV || '0000000000000000',
 };
+
+console.log(keyConfig);
 
 program.args.forEach(a => {
     const list = a.split(' ');
@@ -25,9 +27,8 @@ program.args.forEach(a => {
         case '--app-iv':
             keyConfig.iv = list[2];
             break;
-
     }
-})
+});
 
 try {
     keyConfig = fs.readJSONSync(path.join(process.cwd(), 'config', 'key.json'));
