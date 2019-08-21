@@ -1,13 +1,34 @@
 const fs = require('fs-extra');
 const crypto = require('crypto');
 const path = require('path');
+const program = require('commander');
 const algorithm = 'aes-128-cbc';
+
+program
+    .option('-k, --app-key <appKey>', 'key')
+    .option('-i, --app-iv <appIv>', 'iv');
+
+program.parse(process.argv);
 
 let keyConfigPath = path.join(process.cwd(), 'config', 'key.json');
 let keyConfig = {
-    key: '0000000000000000',
-    iv: '0000000000000000'
+    key: process.env.APP_KEY || '0000000000000000',
+    iv: process.env.APP_IV || '0000000000000000',
 };
+
+console.log(keyConfig);
+
+program.args.forEach(a => {
+    const list = a.split(' ');
+    switch (list[1]) {
+        case '--app-key':
+            keyConfig.key = list[2];
+            break;
+        case '--app-iv':
+            keyConfig.iv = list[2];
+            break;
+    }
+});
 
 try {
     keyConfig = fs.readJSONSync(path.join(process.cwd(), 'config', 'key.json'));

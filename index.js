@@ -36,7 +36,9 @@ app.use(
 );
 app.set('view engine', 'ejs');
 
-const server = app.listen(3000);
+const port = process.env.PORT || 80;
+
+const server = app.listen(port);
 
 const io = require('socket.io')(server, {
     transports: ['websocket'],

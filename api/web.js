@@ -20,6 +20,14 @@ module.exports = function api(app, io, userList, clientList) {
                 }
                 return state;
             }).length != 0;
+
+        clientList.filter(c => {
+            if (c.username != username) {
+                return;
+            }
+            c.login = true;
+            c.token = `${socketId}.${username}`;
+        });
         return res.json(state ? currentUser : null);
     });
 

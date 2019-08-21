@@ -7,6 +7,10 @@
         "type": "node",
         "request": "launch",
         "name": "Launch Program",
-        "program": "${workspaceFolder}/index.js"
+        "program": "${workspaceFolder}/index.js",
+        "args": [
+            " --app-key 378c9ed124c9ac04",
+            " --app-iv e0e774a2ec760ee0",
+        ]
     }]
 }
