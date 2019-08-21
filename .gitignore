@@ -64,3 +64,5 @@ typings/
 .gitconfig
 
 key.json
+
+.vscode/
