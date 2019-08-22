@@ -3,11 +3,11 @@
         <div class="card">
             <img class="card-img-top" src="/static/img/account.jpg" alt="Card image cap" />
             <div class="card-body">
-                <h5 class="card-title">Hi 
+                <h5 class="card-title">Hi
                     <code ng-bind="vm.user"></code>
                 </h5>
                 <h5 class="card-title" ng-if="!vm.hasDevice">
-                    <a href="/scan">綁定裝置？</a>
+                    <a href="/scan" ng-bind="vm.lang.bindingDevice"></a>
                 </h5>
                 <p>
                     <ul class="list-group">
@@ -21,9 +21,8 @@
                     </ul>
                 </p>
                 <form name="form" novalidate>
-                    <button type="button" class="btn btn-block btn-danger" ng-click="vm.logout()">
-                        登出
-                    </button>
+                    <button type="button" class="btn btn-block btn-danger" ng-click="vm.logout()"
+                        ng-bind="vm.lang.logout"> </button>
                 </form>
             </div>
         </div>

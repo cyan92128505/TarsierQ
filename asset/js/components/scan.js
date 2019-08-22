@@ -7,15 +7,16 @@ function ScanController(
     $location,
     $socket,
     userService,
+    languageService,
 ) {
     var vm = this;
-
+    languageService.setup(vm);
     if (!userService.getUser().isLogin) {
         $location.url('/');
     }
     var qrState = (userService.getUser().deviceList || []).length > 0;
     var api = qrState ? 'login' : 'generator';
-    vm.qrText = qrState ? '登入' : '註冊';
+    vm.qrText = qrState ? vm.lang.login : vm.lang.register;
 
     if ($socket.id) {
         getQRCode(url, api, $socket.id).then(res => {
@@ -72,6 +73,7 @@ app.component('scanComponent', {
         '$location',
         '$socket',
         'userService',
+        'languageService',
         ScanController,
     ],
     controllerAs: 'vm',

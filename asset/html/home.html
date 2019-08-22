@@ -5,56 +5,22 @@
             <div class="card-body">
                 <form name="form" ng-submit="vm.login()">
                     <div class="form-group">
-                        <label>帳號</label>
+                        <label ng-bind="vm.lang.account"></label>
                         <input type="text" ng-model="vm.user.username" class="form-control" required />
                     </div>
                     <div class="form-group">
-                        <label>密碼</label>
+                        <label ng-bind="vm.lang.password"></label>
                         <input type="password" ng-model="vm.user.password" class="form-control" required />
                     </div>
 
-                    <!-- <div class="form-group">
-                        <label>驗證碼</label>
-                        <div class="input-group">
-                            <input
-                                type="text"
-                                ng-model="vm.validNumber"
-                                class="form-control"
-                                required
-                            />
-                            <div class="input-group-append">
-                                <span class="input-group-text"
-                                    >{{ vm.vaildCheckNumber }}</span
-                                >
-                            </div>
-                        </div>
-                    </div> -->
+                    <button type="submit" 
+                        class="btn btn-block btn-primary" 
+                        ng-bind="vm.lang.login"></button>
 
-                    <button type="submit" class="btn btn-block btn-primary">
-                        登入
-                    </button>
-
-                    <div class="invalid-feedback d-block" ng-if="vm.invalid">
-                        {{
-                        vm.vaildCheckNumber === vm.validNumber
-                        ? '帳號密碼'
-                        : '驗證碼'
-                        }}錯誤
-                    </div>
+                    <div class="invalid-feedback d-block" 
+                        ng-if="vm.invalid"
+                        ng-bind="vm.lang.IncorrectAccountPassword"></div>
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="validModal" tabindex="-1" role="dialog" aria-labelledby="validModalLabel" aria-hidden="true"
-    data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="validModalLabel">驗證碼</h5>
-            </div>
-            <div class="modal-body">
-                <div id="container"></div>
             </div>
         </div>
     </div>

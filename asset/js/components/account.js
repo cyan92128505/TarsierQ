@@ -5,26 +5,28 @@ function AccountController(
     $http,
     $location,
     userService,
+    languageService,
 ) {
     var vm = this;
+    languageService.setup(vm);
     vm.user = userService.getUser().username;
     vm.deviceList = userService.getUser().deviceList;
     vm.hasDevice = vm.deviceList.length > 0;
 
-    vm.logout = function() {
-        userService.logout().then(function(res) {
+    vm.logout = function () {
+        userService.logout().then(function (res) {
             $location.url('/');
         });
     };
 
-    vm.remove = function(d) {
+    vm.remove = function (d) {
         console.log(d);
         $http
             .post('/remove', {
                 deviceId: d.deviceId,
                 username: d.username,
             })
-            .then(function(res) {
+            .then(function (res) {
                 vm.deviceList = res.data;
                 vm.hasDevice = vm.deviceList.length > 0;
                 userService.getClientList();
@@ -45,6 +47,7 @@ app.component('accountComponent', {
         '$http',
         '$location',
         'userService',
+        'languageService',
         AccountController,
     ],
     controllerAs: 'vm',

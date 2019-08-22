@@ -6,15 +6,17 @@ function NavbarController(
     $location,
     $socket,
     userService,
+    languageService,
 ) {
     var vm = this;
+    languageService.setup(vm);
     $socket.on('connect', () => {
         vm.socketId = $socket.id;
         userService.safeApply($scope);
     });
 
-    $socket.on('refresh', function() {
-        userService.getClientList().then(function() {
+    $socket.on('refresh', function () {
+        userService.getClientList().then(function () {
             $location.url('/');
         });
     });
@@ -30,6 +32,7 @@ app.component('navbarComponent', {
         '$location',
         '$socket',
         'userService',
+        'languageService',
         NavbarController,
     ],
     controllerAs: 'vm',

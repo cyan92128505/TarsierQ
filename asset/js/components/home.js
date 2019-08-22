@@ -7,8 +7,10 @@ function HomeController(
     $timeout,
     $q,
     userService,
+    languageService,
 ) {
     var vm = this;
+    languageService.setup(vm);
     var deferred = $q.defer();
     var promise = deferred.promise;
     promise.then(function () {
@@ -20,27 +22,7 @@ function HomeController(
         password: '',
     };
 
-    // vm.vaildCheckNumber = getRandomFourInt();
-
-    // jigsaw.init({
-    //     el: document.getElementById('container'),
-    //     onSuccess: function() {
-    //         deferred.resolve();
-    //     },
-    //     onFail: function() {
-    //         $('#validModal').modal('hide');
-    //     },
-    //     onRefresh: function() {
-    //         $('#validModal').modal('hide');
-    //     },
-    // });
-
     vm.login = function () {
-        // if (vm.vaildCheckNumber != vm.validNumber) {
-        //     vm.invalid = true;
-        //     return;
-        // }
-        // $('#validModal').modal('show');
         loginAction();
     };
 
@@ -48,19 +30,11 @@ function HomeController(
         $location.url('/account');
     }
 
-    function getRandomFourInt() {
-        var min = Math.ceil(0);
-        var max = Math.floor(9999);
-        var seed = Math.floor(Math.random() * (max - min)) + min;
-        return ('a' + (10000 + seed)).replace('a1', '');
-    }
-
     function loginAction() {
         userService
             .login(vm.user.username, vm.user.password)
             .then(function (res) {
                 console.log(!res.data);
-                // $('#validModal').modal('hide');
                 if (!res.data) {
                     vm.invalid = true;
                     return;
@@ -86,6 +60,7 @@ app.component('homeComponent', {
         '$timeout',
         '$q',
         'userService',
+        'languageService',
         HomeController,
     ],
     controllerAs: 'vm',
