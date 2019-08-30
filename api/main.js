@@ -1,6 +1,7 @@
 const path = require('path');
 const webApi = require(path.join(process.cwd(), 'api', 'web.js'));
 const mobileApi = require(path.join(process.cwd(), 'api', 'mobile.js'));
+const udidApi = require(path.join(process.cwd(), 'api', 'udid.js'));
 
 module.exports = function api(app, io, userList, clientList) {
     console.log(getIPList());
@@ -48,6 +49,7 @@ module.exports = function api(app, io, userList, clientList) {
 
     webApi(app, io, userList, clientList);
     mobileApi(app, io, userList, clientList);
+    udidApi(app, io, userList, clientList);
 
     app.use('/*', rootView);
 };
