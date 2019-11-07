@@ -6,6 +6,20 @@ const errorMsg = {
 };
 const multiparty = require('multiparty');
 
+function normalResponse(status, message) {
+    if (status) {
+        return {
+            "IsSuccess": true,
+        }
+
+    }
+    return {
+        "IsSuccess": false,
+        "ErrorMessage": message,
+        "ErrorType": "Tarsier Error"
+    }
+}
+
 module.exports = function api(app, io, userList, clientList) {
     app.post('/generator', (req, res, next) => {
         let formParser = new multiparty.Form();
@@ -18,19 +32,19 @@ module.exports = function api(app, io, userList, clientList) {
 
             if (!_deviceId) {
                 console.log(errorMsg.noDeviceId);
-                res.send(errorMsg.noDeviceId);
+                res.send(normalResponse(false, errorMsg.noDeviceId));
                 return;
             }
 
             if (!currentUser) {
                 console.log(errorMsg.noSocketId, userList);
-                res.send(errorMsg.noSocketId);
+                res.send(normalResponse(false, errorMsg.noSocketId));
                 return;
             }
 
             if (clientList.some(e => e.deviceId === _deviceId) && !currentUser) {
                 console.log(errorMsg.existDeviceId, currentUser, clientList);
-                res.send(errorMsg.existDeviceId);
+                res.send(normalResponse(false, errorMsg.existDeviceId));
                 return;
             }
 
@@ -55,7 +69,7 @@ module.exports = function api(app, io, userList, clientList) {
             console.log(`io.to(${_socketId}).emit('refresh');`);
             io.to(_socketId).emit('refresh');
 
-            return res.json(client);
+            return res.json(normalResponse(true));
         });
     });
 
@@ -83,7 +97,8 @@ module.exports = function api(app, io, userList, clientList) {
                     `ERROR to login, token:${_token}, device: ${_deviceId}`,
                 );
 
-                res.send(`ERROR to login, token:${_token}, device: ${_deviceId}`);
+                res.json(normalResponse(false, `ERROR to login, token:${_token}, device: ${_deviceId}`));
+
                 return;
             }
 
@@ -97,13 +112,13 @@ module.exports = function api(app, io, userList, clientList) {
             )[0];
 
             if (!targetUser) {
-                res.send('ERROR to login, no user');
+                res.json(normalResponse(false, 'ERROR to login, no user'));
                 return;
             }
 
             console.log(`io.to(${_socketId}).emit('refresh');`);
             io.to(_socketId).emit('refresh');
-            return res.json(targetUser);
+            return res.json(normalResponse(true));
         });
     });
 };
