@@ -9,26 +9,27 @@ const multiparty = require('multiparty');
 function normalResponse(status, message) {
     if (status) {
         return {
-            "IsSuccess": true,
-        }
-
+            IsSuccess: true,
+        };
     }
     return {
-        "IsSuccess": false,
-        "ErrorMessage": message,
-        "ErrorType": "Tarsier Error"
-    }
+        IsSuccess: false,
+        ErrorMessage: message,
+        ErrorType: 'Tarsier Error',
+    };
 }
 
 module.exports = function api(app, io, userList, clientList) {
     app.post('/generator', (req, res, next) => {
         let formParser = new multiparty.Form();
-        formParser.parse(req, function (err, fields, files) {
+        formParser.parse(req, function(err, fields, files) {
             const _deviceId = fields.deviceId[0] || null;
             const _deviceName = fields.deviceName[0] || null;
             const _socketId = fields.key[0].split('.')[0];
             const _username = fields.key[0].split('.')[1];
-            const currentUser = userList.filter(u => u.username === _username)[0];
+            const currentUser = userList.filter(
+                u => u.username === _username,
+            )[0];
 
             if (!_deviceId) {
                 console.log(errorMsg.noDeviceId);
@@ -42,7 +43,10 @@ module.exports = function api(app, io, userList, clientList) {
                 return;
             }
 
-            if (clientList.some(e => e.deviceId === _deviceId) && !currentUser) {
+            if (
+                clientList.some(e => e.deviceId === _deviceId) &&
+                !currentUser
+            ) {
                 console.log(errorMsg.existDeviceId, currentUser, clientList);
                 res.send(normalResponse(false, errorMsg.existDeviceId));
                 return;
@@ -75,7 +79,7 @@ module.exports = function api(app, io, userList, clientList) {
 
     app.post('/login', (req, res, next) => {
         let formParser = new multiparty.Form();
-        formParser.parse(req, function (err, fields, files) {
+        formParser.parse(req, function(err, fields, files) {
             const _deviceId = fields.deviceId[0];
             const _socketId = fields.key[0].split('.')[0];
             const _username = fields.key[0].split('.')[1];
@@ -97,7 +101,12 @@ module.exports = function api(app, io, userList, clientList) {
                     `ERROR to login, token:${_token}, device: ${_deviceId}`,
                 );
 
-                res.json(normalResponse(false, `ERROR to login, token:${_token}, device: ${_deviceId}`));
+                res.json(
+                    normalResponse(
+                        false,
+                        `ERROR to login, token:${_token}, device: ${_deviceId}`,
+                    ),
+                );
 
                 return;
             }
@@ -119,6 +128,16 @@ module.exports = function api(app, io, userList, clientList) {
             console.log(`io.to(${_socketId}).emit('refresh');`);
             io.to(_socketId).emit('refresh');
             return res.json(normalResponse(true));
+        });
+    });
+
+    app.post('/track', (req, res, next) => {
+        let formParser = new multiparty.Form();
+        formParser.parse(req, function(err, fields, files) {
+            const _deviceId = fields.deviceId[0];
+            const _timestamp = fields.timestamp[0];
+
+            return res.send(`${_timestamp} ${_deviceId}`);
         });
     });
 };
