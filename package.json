@@ -23,7 +23,7 @@
     "multiparty": "^4.2.1",
     "nedb": "^1.8.0",
     "pure-svg-code": "^1.0.5",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.5.0",
     "socket.io-client": "^2.2.0",
     "xml2json": "^0.11.2"
   }
